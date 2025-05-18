@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "open": "^10.1.2",
     "pg": "^8.16.0"

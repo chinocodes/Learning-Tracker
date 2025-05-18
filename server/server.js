@@ -5,11 +5,11 @@ const path = require('path');
 const pool = require('./database');
 const PORT = 5000;
 
-app.use(express.static(path.join(__dirname, '..', 'client')));
+app.use(express.static(path.join(__dirname, '..', 'views')));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'login.html'));
+    res.sendFile(path.join(__dirname, '..', 'views', 'login.html'));
 })
 
 app.post('/login', (req, res) => {
