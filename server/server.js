@@ -29,7 +29,8 @@ app.post('/login', (req, res) => {
       if (result.rows.length > 0) {
         const first_name = result.rows[0].first_name;
         const last_name =  result.rows[0].last_name;
-        res.render('dashboard', { first_name: first_name, last_name: last_name});
+        const email = result.rows[0].email;
+        res.render('dashboard', { first_name: first_name, last_name: last_name, email: email});
       }
       else {
         res.send('User not found. Create an account');
