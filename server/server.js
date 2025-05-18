@@ -16,6 +16,10 @@ app.get('/', (req, res) => {
     res.render('login');
 })
 
+app.get('/signup', (req, res) => {
+  res.render('signup');
+})
+
 app.post('/login', (req, res) => {
     const email = req.body["email"];
     const password = req.body["password"];
@@ -33,7 +37,7 @@ app.post('/login', (req, res) => {
         res.render('dashboard', { first_name: first_name, last_name: last_name, email: email});
       }
       else {
-        res.send('User not found. Create an account');
+        res.send('Incorrect Details');
       }
     })
     .catch (err => {
