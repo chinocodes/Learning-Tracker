@@ -20,6 +20,24 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 })
 
+app.post('/signup', (req, res) => {
+  const first_name = req.body["first_name"];
+  const last_name = req.body["last_name"];
+  const email = req.body["email"];
+  const password = req.body["password"];
+
+  const addInfo = `INSERT INTO users (email, first_name, last_name, password) VALUES($1, $2, $3, $4)`;
+
+  pool.query(addInfo, [email, first_name, last_name, password])
+  .then(response => {
+    console.log("User added");
+    res.render('login');
+  })
+  .catch(err => {
+    console.log(err);
+  })
+})
+
 app.post('/login', (req, res) => {
     const email = req.body["email"];
     const password = req.body["password"];
