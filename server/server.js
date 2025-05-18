@@ -7,7 +7,8 @@ const PORT = 5000;
 
 app.use(express.static(path.join(__dirname, '..', 'views')));
 app.use(express.urlencoded({ extended: true }));
-
+app.set('views', path.join(__dirname, '..', 'views'));
+app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'login.html'));
 })
@@ -25,7 +26,7 @@ app.post('/login', (req, res) => {
       if (result.rows.length > 0) {
         const first_name = result.rows[0].first_name;
         const last_name =  result.rows[0].last_name;
-        res.send(`Welcome, ${first_name} ${last_name}`);
+        res.render('dashboard', { first_name: first_name, last_name: last_name});
       }
       else {
         res.send('User not found. Create an account');
