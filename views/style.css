@@ -27,6 +27,7 @@ form {
     height: 100vh;
     display: flex;
     animation: fadeInOut 4s ease-in-out forwards;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes fadeInOut {
