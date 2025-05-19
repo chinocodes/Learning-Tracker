@@ -9,9 +9,10 @@ const path = require('path');
 const pool = require('./database');
 const PORT = 5000;
 
-// setting up session
+
 app.use(express.static(path.join(__dirname, '..', 'views')));
 app.use(express.urlencoded({ extended: true }));
+// setting up session
 app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,

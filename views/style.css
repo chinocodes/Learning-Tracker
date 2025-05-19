@@ -34,9 +34,12 @@ form {
     height: 100vh;
     display: flex;
 }
-
-
-
+.body-div {
+    display: flex;
+}
+.heading {
+    padding: 50px;
+}
 
 
 
