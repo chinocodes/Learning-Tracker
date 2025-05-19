@@ -63,19 +63,28 @@
       </ul>
     </div>
   </div>
-  <div class="heading">
-    <h2>Your tasks..</h1>
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title"><%= assignment_name %></h5>
-        <h6 class="card-subtitle mb-2 text-muted">Due on: <%= due_date %></h6>
-        <p class="card-text"><%= description %></p>
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
+  <div class="assignment-body">
+    <h2>Your tasks..</h2>
+       <div class="row">
+      <% tasks.forEach(task => { %>
+       
+        
+        <div class="card" style="width: 18rem;">
+          
+          <div class="card-body">
+            <h5 class="card-title"><%= task.assignment_name %></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Due on: <%= task.due_date %></h6>
+            <p class="card-text"><%= task.description %></p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+          
       </div>
-  </div>
+      
+      <% }) %>
+      
   
-  </div>
+      </div>
   
   </div>
     

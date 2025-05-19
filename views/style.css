@@ -37,10 +37,12 @@ form {
 .body-div {
     display: flex;
 }
-.heading {
+.assignment-body {
     padding: 50px;
 }
-
+.card {
+    padding: 50px;
+}
 
 
 

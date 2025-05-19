@@ -112,7 +112,7 @@ app.get('/dashboard', ensureAuthenticated, (req, res) => {
     const due_date = result.rows[0].due_date;
     const description = result.rows[0].description;
 
-    res.render('dashboard', {first_name, last_name, email, assignment_name, due_date, description } );
+    res.render('dashboard', {first_name, last_name, email, tasks : result.rows } );
 
     console.log(assignment_name);
   })
