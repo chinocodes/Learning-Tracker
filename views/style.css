@@ -40,6 +40,9 @@ form {
 .assignment-body {
     padding: 50px;
 }
+h2 {
+    font-family: "Playpen Sans Thai", cursive;
+}
 .card {
     padding: 50px;
 }

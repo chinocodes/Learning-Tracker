@@ -113,8 +113,8 @@ app.get('/dashboard', ensureAuthenticated, (req, res) => {
     const description = result.rows[0].description;
 
     res.render('dashboard', {first_name, last_name, email, tasks : result.rows } );
-
-    console.log(assignment_name);
+    console.log(result.rows)
+    // console.log(assignment_name);
   })
   .catch(err => {
     console.log(err);
