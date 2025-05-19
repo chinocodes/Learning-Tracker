@@ -1,12 +1,71 @@
 const express = require('express');
 const app = express();
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+require('dotenv').config();
 const open = require('open');
 const path = require('path');
 const pool = require('./database');
 const PORT = 5000;
 
+// setting up session
 app.use(express.static(path.join(__dirname, '..', 'views')));
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy ({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
+  (email, password, done) => {
+    const query = `SELECT * FROM users WHERE email = $1 AND password = $2`;
+    pool.query(query, [email, password], (err, result) => {
+      if (err) return done(err);
+      if (result.rows.length === 0) {
+        return done(null, false, { message: 'invalid creds' });
+      }
+      return done(null, result.rows[0]);
+    });
+  }
+
+
+
+));
+
+// save user in session
+
+passport.serializeUser((user, done) => {
+  done(null, user.email);
+});
+
+// retrieve user from session
+
+passport.deserializeUser((user, done) => {
+  pool.query(`SELECT * FROM users WHERE email = $1`, [user], (err, result) => {
+    if (err) return done(err);
+    done(null, result.rows[0]);
+  });
+});
+
+// protection middleware
+
+function ensureAuthenticated (req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+}
+
+
+
 app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'ejs');
 
@@ -35,34 +94,22 @@ app.post('/signup', (req, res) => {
   })
   .catch(err => {
     console.log(err);
-  })
-})
+  });
+});
 
-app.post('/login', (req, res) => {
-    const email = req.body["email"];
-    const password = req.body["password"];
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/',
+}));
 
-    // res.send(`Your email is ${email} and your password is ${password} `);
+app.get('/dashboard', ensureAuthenticated, (req, res) => {
+  const {first_name, last_name, email} = req.user;
+  res.render('dashboard', {first_name, last_name, email} );
 
-    const checkInfo = `SELECT * FROM users WHERE email = $1 AND password = $2`;
+});
 
-    pool.query(checkInfo, [email, password])
-    .then(result => {
-      if (result.rows.length > 0) {
-        const first_name = result.rows[0].first_name;
-        const last_name =  result.rows[0].last_name;
-        const email = result.rows[0].email;
-        res.render('dashboard', { first_name: first_name, last_name: last_name, email: email});
-      }
-      else {
-        res.send('Incorrect Details');
-      }
-    })
-    .catch (err => {
-      console.log(err)
-    });
-})
+
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
-})
+});
