@@ -104,7 +104,16 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/dashboard', ensureAuthenticated, (req, res) => {
-  const {first_name, last_name, email} = req.user;
+  const {first_name, last_name, email, user_id} = req.user;
+  checkTasks = `SELECT * FROM assignments WHERE user_id = $1`;
+  pool.query(checkTasks, [user_id])
+  .then(result => {
+    console.log(result.rows[0]);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
   res.render('dashboard', {first_name, last_name, email} );
 
 });
