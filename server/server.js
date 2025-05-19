@@ -110,8 +110,9 @@ app.get('/dashboard', ensureAuthenticated, (req, res) => {
   .then(result => {
     const assignment_name = result.rows[0].assignment_name;
     const due_date = result.rows[0].due_date;
+    const description = result.rows[0].description;
 
-    res.render('dashboard', {first_name, last_name, email, assignment_name, due_date } );
+    res.render('dashboard', {first_name, last_name, email, assignment_name, due_date, description } );
 
     console.log(assignment_name);
   })
