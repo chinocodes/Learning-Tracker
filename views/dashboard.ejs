@@ -69,6 +69,7 @@
   <div class="assignment-body">
     <h2>Assignments due soon..</h2>
        <div class="row">
+      <% if (tasks) { %>
       <% tasks.forEach(task => { %>
         <% let currentDate = new Date(); %>
         <% let dueDate = new Date(task.due_date); %>
@@ -90,6 +91,10 @@
       <% } %>
       
       <% }) %>
+      
+      <% } else { %>
+        <h2>You have no assignments due soon :)</h2>
+        <% } %>
       
   
       </div>

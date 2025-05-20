@@ -108,16 +108,17 @@ app.get('/dashboard', ensureAuthenticated, (req, res) => {
   checkTasks = `SELECT * FROM assignments WHERE user_id = $1`;
   pool.query(checkTasks, [user_id])
   .then(result => {
-    const assignment_name = result.rows[0].assignment_name;
-    const due_date = result.rows[0].due_date;
-    const description = result.rows[0].description;
+      const assignment_name = result.rows[0].assignment_name;
+      const due_date = result.rows[0].due_date;
+      const description = result.rows[0].description;
 
-    res.render('dashboard', {first_name, last_name, email, tasks : result.rows } );
-    console.log(result.rows)
-    // console.log(assignment_name);
+      res.render('dashboard', {first_name, last_name, email, tasks : result.rows.length > 0 ? result.rows : null } );
+      console.log(result.rows)
+      // console.log(assignment_name);  
   })
   .catch(err => {
     console.log(err);
+    res.render('dashboard', {first_name, last_name, email, tasks : null } );
   });
 
   
