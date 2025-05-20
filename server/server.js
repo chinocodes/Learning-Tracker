@@ -7,6 +7,8 @@ require('dotenv').config();
 const open = require('open');
 const path = require('path');
 const pool = require('./database');
+const { compile } = require('ejs');
+const { getUserTasks } = require('./sql_queries');
 const PORT = 5000;
 
 
@@ -103,30 +105,25 @@ app.post('/login', passport.authenticate('local', {
   failureRedirect: '/',
 }));
 
-app.get('/dashboard', ensureAuthenticated, (req, res) => {
+app.get('/dashboard', ensureAuthenticated, async (req, res) => {
   const {first_name, last_name, email, user_id} = req.user;
-  checkTasks = `SELECT * FROM assignments WHERE user_id = $1`;
-  pool.query(checkTasks, [user_id])
-  .then(result => {
-      const assignment_name = result.rows[0].assignment_name;
-      const due_date = result.rows[0].due_date;
-      const description = result.rows[0].description;
-
-      res.render('dashboard', {first_name, last_name, email, tasks : result.rows.length > 0 ? result.rows : null } );
-      console.log(result.rows)
-      // console.log(assignment_name);  
-  })
-  .catch(err => {
+  try {
+    const tasks = await getUserTasks(user_id);
+    res.render('dashboard', {first_name, last_name, email, tasks : tasks.length > 0 ? tasks : null } );
+    console.log(tasks)
+  }
+  catch (err) {
     console.log(err);
     res.render('dashboard', {first_name, last_name, email, tasks : null } );
-  });
+  }
 
   
 
 });
 
-
-
+// app.post('/complete', (req, res) => {
+//   completeQuery = ``
+// })
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
 });
